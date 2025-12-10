@@ -1,5 +1,67 @@
+<!DOCTYPE html>
 <html>
-  <body>
-    Hello
-  </body>
+<head>
+  <title>Family Details Form</title>
+  <style>
+    body { font-family: Arial; }
+    .member { border:1px solid #ccc; padding:10px; margin:10px 0; }
+  </style>
+</head>
+<body>
+
+<h2>Family Details Form</h2>
+
+<input type="text" id="head_name" placeholder="Family Head Name"><br><br>
+<input type="text" id="mobile" placeholder="Mobile Number"><br><br>
+<input type="text" id="address" placeholder="Address"><br><br>
+
+<h3>Family Members</h3>
+<div id="members"></div>
+
+<button onclick="addMember()">Add Family Member</button>
+<br><br>
+<button onclick="submitForm()">Submit</button>
+
+<script>
+let membersDiv = document.getElementById("members");
+
+function addMember() {
+  let div = document.createElement("div");
+  div.className = "member";
+  div.innerHTML = `
+    <input placeholder="Name"><br>
+    <input placeholder="Age"><br>
+    <input placeholder="Relation"><br>
+    <input placeholder="Occupation"><br>
+  `;
+  membersDiv.appendChild(div);
+}
+
+function submitForm() {
+  let members = [];
+  document.querySelectorAll(".member").forEach(m => {
+    let inputs = m.querySelectorAll("input");
+    members.push({
+      name: inputs[0].value,
+      age: inputs[1].value,
+      relation: inputs[2].value,
+      occupation: inputs[3].value
+    });
+  });
+
+  fetch("PASTE_WEB_APP_URL_HERE", {
+    method: "POST",
+    body: JSON.stringify({
+      head_name: document.getElementById("head_name").value,
+      mobile: document.getElementById("mobile").value,
+      address: document.getElementById("address").value,
+      members: members
+    })
+  })
+  .then(r => r.json())
+  .then(() => alert("Data Saved Successfully"));
+}
+</script>
+
+</body>
 </html>
